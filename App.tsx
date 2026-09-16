@@ -1,22 +1,26 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from "react-native";
+import Header from "./components/Header";
+import CoffeCard from "./components/CoffeCard";
 
 export default function App() {
+  const [name, setName] = useState('')
+  const [message, setMessage] = useState('')
+
+  const handleOrder = () => {
+    if (name.trim() === "") {
+      setMessage("Por favor, informe um nome")
+    } else {
+      setMessage(`Olá ${name}! Seu pedido foi recebido.`)
+    }
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={30}>
       <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.headerTitle}>Café do Código</Text>
-            <Text style={styles.headerSubtitle}>Seu café, uma linha por vez </Text>
-          </View>
-
-          <View style={styles.avatarPlaceholder}>
-            <Ionicons name="person" size={20} color="#2f2d2c"></Ionicons>
-          </View>
-
-        </View>
+        <Header />
         {/*Header*/}
 
         {/*Conteudo*/}
@@ -40,29 +44,10 @@ export default function App() {
 
           <View style={styles.menu}>
 
-            <View style={styles.cardProduct}>
-              <Text style={styles.nameProduct}>Expresso</Text>
-              <Text style={styles.descriptionProduct}>Puro e forte</Text>
-              <Text style={styles.priceProduct}>R$ 7,00</Text>
-            </View>
-
-            <View style={styles.cardProduct}>
-              <Text style={styles.nameProduct}>Cappuccino</Text>
-              <Text style={styles.descriptionProduct}>Clássico com epuma</Text>
-              <Text style={styles.priceProduct}>R$ 12,90</Text>
-            </View>
-
-            <View style={styles.cardProduct}>
-              <Text style={styles.nameProduct}>Latte</Text>
-              <Text style={styles.descriptionProduct}>Leite cremoso</Text>
-              <Text style={styles.priceProduct}>R$ 11,50</Text>
-            </View>
-
-            <View style={styles.cardProduct}>
-              <Text style={styles.nameProduct}>Mocha</Text>
-              <Text style={styles.descriptionProduct}>Toque de chocolate</Text>
-              <Text style={styles.priceProduct}>R$ 13,50</Text>
-            </View>
+          <CoffeCard name="Expresso" description="Puro e Forte" price="R$7,00"/>
+          <CoffeCard name="Cappuccino" description="Clássico com espuma" price="R$12,90"/>
+          <CoffeCard name="Latte" description="Leite e cremoso" price="R$11,50"/>
+          <CoffeCard name="Mocha" description="Toque de chcolate" price="R$13,50"/>
 
           </View>
 
@@ -72,18 +57,28 @@ export default function App() {
             <TextInput
               style={styles.input}
               placeholder="Digite seu nome"
+              value={name}
+              onChangeText={setName}
 
             >
             </TextInput>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleOrder}>
               <Text style={styles.buttonText}>Fazer meu pedido</Text>
             </TouchableOpacity>
+
+            {message !== '' && (
+              <Text style={styles.messageText}>{message}</Text>
+            )}
 
           </View>
 
         </View>
         {/*Conteudo*/}
+
+
+
+
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -94,33 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#A98467',
 
-  },
-  header: {
-    width: '100%',
-    paddingHorizontal: 24,
-    paddingTop: 60,
-    paddingBottom: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: "#2f2d2c"
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: "#441a1a",
-    marginTop: 4
-  },
-  avatarPlaceholder: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#f0f0f0",
-    justifyContent: "center",
-    alignItems: "center"
   },
   saudacao: {
     marginBottom: 24,
@@ -183,34 +151,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 32
   },
-  cardProduct: {
-    width: "48%",
-    backgroundColor: "#ffffff",
-    padding: 16,
-    borderRadius: 16,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.05,
-    elevation: 4,
-    marginBottom: 16
-  },
-  nameProduct: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#2f2d2c"
-  },
-  descriptionProduct: {
-    fontSize: 12,
-    marginTop: 4,
-    color: "#9b9b9b"
-
-  },
-  priceProduct: {
-    fontSize: 16,
-    fontWeight: "800",
-    marginTop: 12,
-    color: "#ff5c00"
-  },
   orderSection: {
     backgroundColor: "#ffffff",
     padding: 24,
@@ -252,6 +192,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#ffffff",
     fontWeight: "700"
+  },
+  messageText: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#ff5c00",
+    textAlign: "center",
+    marginTop: 20
   },
 })
 
